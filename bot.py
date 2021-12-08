@@ -18,8 +18,8 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.common.exceptions import TimeoutException
 import pandas as pd
 from bs4 import BeautifulSoup
-
-
+from langdetect import detect
+from deep_translator import GoogleTranslator
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -27,7 +27,7 @@ TOKEN = os.getenv('DISCORD_TOKEN')
 GUILD = os.getenv('DISCORD_GUILD')
 
 chrome_options = Options()
-chrome_options.add_argument("--headless")
+#chrome_options.add_argument("--headless")
 chrome_options.add_experimental_option("excludeSwitches", ["enable-automation"])
 chrome_options.add_experimental_option('useAutomationExtension', False)
 chrome_options.add_argument("--disable-blink-features=AutomationControlled")
@@ -40,7 +40,7 @@ bot = commands.Bot(command_prefix='!')
 async def on_ready():
     for guild in bot.guilds:
         if guild.name == GUILD:
-            print("Connected to SlanttiBot!")
+            print("SlanttiBot in online!")
             break
         
 @bot.event
@@ -86,6 +86,7 @@ async def on_message(message):
         await message.channel.send(file=file, embed=embed)
 
     if message.content.startswith("!"):
+        languageIsSet = False
         df_terms = pd.read_csv('terms_data.csv')
         pd.set_option('display.max_colwidth', None)
         terms = []
@@ -95,22 +96,48 @@ async def on_message(message):
         
         message_content_without_exclamation_mark = message.content[1:]
         message_content_list = message_content_without_exclamation_mark.split()
+        print(message_content_list[-1])
         casino_url = message_content_list[0]
+
         if message_content_list[-1] != casino_url:
-            message_content_list.pop(0)
-            is_this_game_banned = ' '.join([str(elem) for elem in message_content_list])
+            if "/" not in message_content_list[-1]:
+                message_content_list.pop(0)
+                is_this_game_banned = ' '.join([str(elem) for elem in message_content_list])
+            else:
+                language = message_content_list[-1].replace("/", "")
+                languageIsSet = True
      
         if "https://" not in casino_url:
             casino_url = "https://" + casino_url
         if validators.url(casino_url):
             please_wait = await message.channel.send("Please wait...")
-            print(message.channel.fetch_message(please_wait))
             get_url = requests.get(casino_url)
+            soup = BeautifulSoup(get_url.text, "html.parser")
 
-        
-            if "/fi" in get_url.url:
-                casino_url = get_url.url.replace("/fi", "/en")
-
+            if languageIsSet == False:
+                if "/fi" in get_url.url:
+                        casino_url = get_url.url.replace("/fi", "/en")
+                        language = "fi"
+                elif "/sv" in get_url.url:
+                        casino_url = get_url.url.replace("/sv", "/en")
+                        language = "sv"
+                elif "/de" in get_url.url:
+                        casino_url = get_url.url.replace("/de", "/en")
+                        language = "de"
+                elif "/no" in get_url.url:
+                        casino_url = get_url.url.replace("/no", "/en")
+                        language = "no"
+                elif "/ja" in get_url.url:
+                        casino_url = get_url.url.replace("/ja", "/en")
+                        language = "ja"
+                elif "/jp" in get_url.url:
+                        casino_url = get_url.url.replace("/jp", "/en")
+                        language = "ja"
+                elif "/ja-jp" in get_url.url:
+                        casino_url = get_url.url.replace("/ja-jp", "/en")
+                        language = "ja"
+                else:
+                    language = "english"
 
             if casino_url in df_terms["Casino Url"].values:
                 index_of_value = df_terms[df_terms["Casino Url"]==casino_url].index.values
@@ -118,14 +145,20 @@ async def on_message(message):
                 url_to_terms = df_terms["Url To Terms"].iloc[index_of_value].to_string(index=False)
                 char_range = len(terms_from_csv)
 
+                if language != "english":
+                    translated = GoogleTranslator(source='auto', target=language).translate(terms_from_csv)
+                    terms_from_csv = translated
                 if is_this_game_banned == "None":
+                    await please_wait.delete()
                     for number in range(int(math.ceil(char_range / 1990))):
                         if(number == 0):
                             await message.channel.send("*" + terms_from_csv[0 : 1990] + "*")
                         else:
                             await message.channel.send("*" + terms_from_csv[number * 1990 : (number + 1) * 1990] + "*")
+                    
                     await message.channel.send(url_to_terms)
                 else:
+                    await please_wait.delete()
                     if is_this_game_banned.lower() in terms_from_csv.lower():
                         await message.channel.send("The game " + "*" + is_this_game_banned + "*" + " was found in the terms and conditions! " + url_to_terms)
                     else:
@@ -149,14 +182,17 @@ async def on_message(message):
 
                 for link in soup.findAll('a', href=re.compile(r'\bterms|\brules|\bconditions|\bpolicy')): 
                     links.append(link['href'])
-                
+                    print(link)
+                    print("<---")
                 if any("bonus" in x for x in links):
                     links[:] = [url for url in links if any(sub in url for sub in word)]
+                    
+                    
                 else:
                     driver.get(urllib.parse.urljoin(driver.current_url, links[0]))
                     soup = BeautifulSoup(driver.page_source, 'html.parser')
-                    for link2 in soup.findAll('a', href=re.compile(r'\bterms|\brules|\bconditions')):
-                        links.append(link2['href'])
+                    for link in soup.findAll('a', href=re.compile(r'\bterms|\brules|\bconditions')):
+                        links.append(link['href'])
                     if any("bonus" in x for x in links):
                         links[:] = [url for url in links if any(sub in url for sub in word)]
                 
@@ -214,13 +250,17 @@ async def on_message(message):
                             #df_terms2.to_csv('terms_data.csv') #, mode='a', index=True, header=False
                             
                             if is_this_game_banned == "None":
+                                await please_wait.delete()
                                 for number in range(int(math.ceil(char_range / 1990))):
                                     if(number == 0):
+                                        
                                         await message.channel.send("*" + terms_str[0 : 1990] + "*")
+                                       
                                     else:
                                         await message.channel.send("*" + terms_str[number * 1990 : (number + 1) * 1990] + "*")
                                 await message.channel.send(url_to_terms)
                             else:
+                                await please_wait.delete()
                                 if is_this_game_banned.lower() in terms_str.lower():
                                     await message.channel.send("The game " + "*" + is_this_game_banned + "*" + " was found in the terms and conditions! " + url_to_terms)
                                 else:
