@@ -30,7 +30,7 @@ chrome_options.add_experimental_option("excludeSwitches", ["enable-automation"])
 chrome_options.add_experimental_option('useAutomationExtension', False)
 chrome_options.add_argument("--disable-blink-features=AutomationControlled")
 
-bot = commands.Bot(command_prefix='!', activity=discord.Game(name="/help"))
+bot = commands.Bot(command_prefix='!', activity=discord.Game(name="!help"))
 
 @bot.event
 async def on_ready():
@@ -52,10 +52,12 @@ async def on_message(message):
         file = discord.File("thumbnail_images/help.png", filename="help.png")
         embed.set_thumbnail(url="attachment://help.png")
         embed.add_field(name="!examplecasino.com", value="Enter a url to an online casino to fetch the games that are banned from playing with bonusmoney.", inline=True)
-        embed.add_field(name="!examplecasino.com /de", value="Translate the result from english. Available languages: \n`arabic: ar \nbulgarian: bg \ncatalan: ca \nchinese (simplified): zh-CN \nchinese (traditional): zh-TW \ncroatian: hr \nczech: cs \ndanish: da \ndutch: nl \nestonian: et \nfinnish: fi \nfrench: fr \ngerman: de \ngreek: el \n`", inline=True)
-        embed.add_field(name="\u200b", value="`hungarian: hu \nicelandic: is \nitalian: it \njapanese: ja \nkorean: ko \nlatvian: lv \nlithuanian: lt \nnorwegian: no \npolish: pl \nportuguese: pt \nrussian: ru \nslovak: sk \nslovenian: sl \nspanish: es \nswedish: sv \nturkish: tr`", inline=True) 
-        embed.add_field(name="!examplecasino.com reactoonz", value="Check if a specific game is banned.", inline=True)
+        embed.add_field(name="!examplecasino.com /de", value="Translate the result from english. Available languages: \n`arabic: ar \nbulgarian: bg \ncatalan: ca \nchinese (simplified): zh-CN \nchinese (traditional): zh-TW \ncroatian: hr \nczech: cs \ndanish: da \ndutch: nl \nestonian: et \nfinnish: fi \nfrench: fr`", inline=True)
+        embed.add_field(name="\u200b", value="`german: de \ngreek: el \nhungarian: hu \nicelandic: is \nitalian: it \njapanese: ja \nkorean: ko \nlatvian: lv \nlithuanian: lt \nnorwegian: no \npolish: pl \nportuguese: pt \nrussian: ru \nslovak: sk \nslovenian: sl \nspanish: es \nswedish: sv \nturkish: tr`", inline=True) 
+        embed.add_field(name="!examplecasino.com Book of Dead", value="Check if a specific game is banned.", inline=True)
+        embed.add_field(name="!stats Book of Dead", value="Returns the stats of a chosen game.", inline=True) 
         embed.add_field(name="!game", value="SlanttiBot suggests a random game to you!", inline=True) 
+
 
         await message.channel.send(file=file, embed=embed)
 
@@ -101,10 +103,13 @@ async def on_message(message):
         message_content_without_exclamation_mark = message.content[1:]
         message_content_list = message_content_without_exclamation_mark.split()
         game_for_stats = ' '.join([str(elem) for elem in message_content_list[1:]])
+        
         df_games_lowercase['Name'] = df_games_lowercase['Name'].str.lower()
-        game_for_stats_index = df_games.loc[df_games_lowercase['Name'] == game_for_stats].index.values
+        game_for_stats_index = df_games.loc[df_games_lowercase['Name'] == game_for_stats.lower()].index.values
+        
         game_for_stats_index = int(game_for_stats_index)
-
+        print(type(game_for_stats_index))
+        print("<---")
         game_name = df_games['Name'][game_for_stats_index]
         game_provider = df_games['Provider'][game_for_stats_index]
         image_url = df_games['Image_url'][game_for_stats_index]
@@ -201,7 +206,6 @@ async def on_message(message):
 
                 if languageIsSet == True:
                     if language != "english":
-                        langs_dict = GoogleTranslator.get_supported_languages(as_dict=True)
                         translated = GoogleTranslator(source='auto', target=language).translate(terms_from_csv)
                         terms_from_csv = translated
                 if is_this_game_banned == "None":
