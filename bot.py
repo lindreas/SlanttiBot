@@ -56,8 +56,7 @@ async def on_message(message):
         embed.add_field(name="\u200b", value="`german: de \ngreek: el \nhungarian: hu \nicelandic: is \nitalian: it \njapanese: ja \nkorean: ko \nlatvian: lv \nlithuanian: lt \nnorwegian: no \npolish: pl \nportuguese: pt \nrussian: ru \nslovak: sk \nslovenian: sl \nspanish: es \nswedish: sv \nturkish: tr`", inline=True) 
         embed.add_field(name="!examplecasino.com Book of Dead", value="Check if a specific game is banned.", inline=True)
         embed.add_field(name="!stats Book of Dead", value="Returns the stats of a chosen game.", inline=True) 
-        embed.add_field(name="!game", value="SlanttiBot suggests a random game to you!", inline=True) 
-
+        embed.add_field(name="!game", value="SlanttiBot suggests a random game to you!", inline=True)
 
         await message.channel.send(file=file, embed=embed)
 
@@ -71,7 +70,6 @@ async def on_message(message):
         pay_lines = df_games['Pay_lines'][rand_int]
         free_spins = df_games['Free_spins'][rand_int]
         bonus_game = df_games['Bonus_game'][rand_int]
-        #max_win = df_games['Max Win'][rand_int]
 
         if "nan" in str(rtp) or "Unknown" in str(rtp):
             rtp = "-"
@@ -79,25 +77,19 @@ async def on_message(message):
             bonus_game = "-"
         if "nan" in str(pay_lines):
             pay_lines = "-"
-        #if "Unknown" in str(max_win):
-            #max_win = "-"
-
         
         embed=discord.Embed(title=game_name, color=discord.Color.from_rgb(228,175,255))
-        #embed.set_author(name=bot.user.display_name, icon_url=bot.user.avatar_url)
-        file = discord.File("thumbnail_images/" + image_url, filename=image_url)
+        file = discord.File("thumbnail_images/" + image_url.lower(), filename=image_url.lower())
 
-        embed.set_thumbnail(url="attachment://" + image_url)
+        embed.set_thumbnail(url="attachment://" + image_url.lower())
         embed.add_field(name="Provider", value=game_provider, inline=True) 
         
         embed.add_field(name="Free Spins", value=free_spins, inline=True)
         embed.add_field(name="Bonus Game", value=bonus_game, inline=True)
         embed.add_field(name="RTP", value=rtp, inline=True) 
         embed.add_field(name="Pay Lines", value=pay_lines, inline=True)
-        #embed.add_field(name="Max Win", value="x123", inline=True)
-        #embed.add_field(name="Max Win", value=max_win, inline=True)
-        await message.channel.send(file=file, embed=embed)
 
+        await message.channel.send(file=file, embed=embed)
 
     if message.content.startswith("!stats"):
         message_content_without_exclamation_mark = message.content[1:]
@@ -107,44 +99,39 @@ async def on_message(message):
         df_games_lowercase['Name'] = df_games_lowercase['Name'].str.lower()
         game_for_stats_index = df_games.loc[df_games_lowercase['Name'] == game_for_stats.lower()].index.values
         
-        game_for_stats_index = int(game_for_stats_index)
-        print(type(game_for_stats_index))
-        print("<---")
-        game_name = df_games['Name'][game_for_stats_index]
-        game_provider = df_games['Provider'][game_for_stats_index]
-        image_url = df_games['Image_url'][game_for_stats_index]
-        rtp = df_games['RTP'][game_for_stats_index]
-        pay_lines = df_games['Pay_lines'][game_for_stats_index]
-        free_spins = df_games['Free_spins'][game_for_stats_index]
-        bonus_game = df_games['Bonus_game'][game_for_stats_index]
-        #max_win = df_games['Max Win'][game_for_stats_index]
-        
-        if "nan" in str(rtp) or "Unknown" in str(rtp):
-            rtp = "-"
-        if "nan" in str(bonus_game):
-            bonus_game = "-"
-        if "nan" in str(pay_lines):
-            pay_lines = "-"
-        #if "Unknown" in str(max_win):
-            #max_win = "-"
-
-        
-        embed=discord.Embed(title=game_name, color=discord.Color.from_rgb(228,175,255))
-        #embed.set_author(name=bot.user.display_name, icon_url=bot.user.avatar_url)
-        file = discord.File("thumbnail_images/" + image_url, filename=image_url)
-
-        embed.set_thumbnail(url="attachment://" + image_url)
-        embed.add_field(name="Provider", value=game_provider, inline=True) 
-        
-        embed.add_field(name="Free Spins", value=free_spins, inline=True)
-        embed.add_field(name="Bonus Game", value=bonus_game, inline=True)
-        embed.add_field(name="RTP", value=rtp, inline=True) 
-        embed.add_field(name="Pay Lines", value=pay_lines, inline=True)
-        #embed.add_field(name="Max Win", value="x123", inline=True)
-        #embed.add_field(name="Max Win", value=max_win, inline=True)
-        await message.channel.send(file=file, embed=embed)
+        if game_for_stats_index.size < 1:
+            await message.channel.send("Game " + "**" + game_for_stats + "**" + " not found!")
+        else:
+            game_for_stats_index = int(game_for_stats_index)
+            game_name = df_games['Name'][game_for_stats_index]
+            game_provider = df_games['Provider'][game_for_stats_index]
+            image_url = df_games['Image_url'][game_for_stats_index]
+            rtp = df_games['RTP'][game_for_stats_index]
+            pay_lines = df_games['Pay_lines'][game_for_stats_index]
+            free_spins = df_games['Free_spins'][game_for_stats_index]
+            bonus_game = df_games['Bonus_game'][game_for_stats_index]
             
+            if "nan" in str(rtp) or "Unknown" in str(rtp):
+                rtp = "-"
+            if "nan" in str(bonus_game):
+                bonus_game = "-"
+            if "nan" in str(pay_lines):
+                pay_lines = "-"
 
+            
+            embed=discord.Embed(title=game_name, color=discord.Color.from_rgb(228,175,255))
+            
+            file = discord.File("thumbnail_images/" + image_url.lower(), filename=image_url.lower())
+
+            embed.set_thumbnail(url="attachment://" + image_url.lower())
+            embed.add_field(name="Provider", value=game_provider, inline=True) 
+            
+            embed.add_field(name="Free Spins", value=free_spins, inline=True)
+            embed.add_field(name="Bonus Game", value=bonus_game, inline=True)
+            embed.add_field(name="RTP", value=rtp, inline=True) 
+            embed.add_field(name="Pay Lines", value=pay_lines, inline=True)
+
+            await message.channel.send(file=file, embed=embed)
 
     if message.content.startswith("!"):
         languageIsSet = False
@@ -195,7 +182,7 @@ async def on_message(message):
                     casino_url = get_url.url.replace("/ca", "/en")
             elif "/gb" in get_url.url:
                     casino_url = get_url.url.replace("/gb", "/en")
-            else:
+            if languageIsSet == False:
                 language = "english"
 
             if casino_url in df_terms["Casino Url"].values:
@@ -216,7 +203,7 @@ async def on_message(message):
                         else:
                             await message.channel.send("*" + terms_from_csv[number * 1990 : (number + 1) * 1990] + "*")
                     
-                    await message.channel.send(url_to_terms)
+                    await message.channel.send("`The result might not include the whole list. Please check it at:` " + url_to_terms)
                 else:
                     await please_wait.delete()
                     if is_this_game_banned.lower() in terms_from_csv.lower():
@@ -227,6 +214,7 @@ async def on_message(message):
             else:
                 driver = webdriver.Chrome(str(pathlib.Path().resolve()) + r"/chromedriver.exe",options=chrome_options)
                 driver.get(casino_url)
+                pattern = re.compile(r''+ regex_patterns.read(), re.IGNORECASE)
 
                 try:
                     WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.XPATH, "//body//a[contains(@href, 'rules') or contains(@href, 'terms') or contains(@href, 'conditions') or contains(@href, 'Rules') or contains(@href, 'Terms') or contains(@href, 'Conditions')]")))
@@ -245,7 +233,6 @@ async def on_message(message):
                 if any("bonus" in x for x in links):
                     links[:] = [url for url in links if any(sub in url for sub in word)]
                     
-                    
                 else:
                     driver.get(urllib.parse.urljoin(driver.current_url, links[0]))
                     soup = BeautifulSoup(driver.page_source, 'html.parser')
@@ -255,7 +242,6 @@ async def on_message(message):
                         links[:] = [url for url in links if any(sub in url for sub in word)]
                 
                 if links != []:
-                    
                     driver.get(urllib.parse.urljoin(driver.current_url, links[0]))
                     url_to_terms = driver.current_url
                     try:
@@ -263,34 +249,34 @@ async def on_message(message):
                     finally:
                         soup = BeautifulSoup(driver.page_source, 'html.parser')
                         
-                        driver.quit()
                         for s in soup.select('script'):
                             s.extract()
-                        for t in soup.findAll(text=re.compile(r''+ regex_patterns.read(), re.IGNORECASE)):
-                                                        
+                    
+                        for t in soup.findAll(text=True):
                             if isinstance(t, NavigableString):
-                                terms.append(t.parent)
-                                if ":" in t:
-                                    for sibling in t.parent.next_siblings:
-                                        terms.append(sibling)
-                                    
-                                continue
-                            else:    
-                                terms.append(t.parent.text)
-                                if ":" in t:
-                                    terms.append(t.next.text)
+                                match = pattern.search(t)
+                                if match:
+                                    terms.append(match.string)
+                                    if ":" in match.string:
+                                        for sibling in t.parent.next_siblings:
+                                            terms.append(sibling)
+                                    continue
+                            else:
+                                match = pattern.search(t)
+                                if match:
+                                    terms.append(match.string)
+                                    if ":" in match.string:
+                                        terms.append(t.next.text)
                         if terms != []:
                             terms2 = []
                             
                             terms = list(dict.fromkeys(terms))
                             for x in terms:
-                                
                                 if isinstance(x, NavigableString):
                                     x = str(x)
                                 else:
                                     x = x.text
                                 x = x.replace("\n", " ").replace("\xa0", " ").replace("*", "").rstrip()
-                                
                                 terms2.append(x)
                             terms_str = str(terms2)[1:-1]
                             char_range = len(terms_str)
@@ -307,16 +293,18 @@ async def on_message(message):
                             #df_terms2 = pd.DataFrame({'Casino Url': casino_url, 'Terms':terms_str, 'Url To Terms':url_to_terms}, index=[0])
                             #df_terms2.to_csv('terms_data.csv') #, mode='a', index=True, header=False
                             
+                            if languageIsSet == True:
+                                if language != "english":
+                                    translated = GoogleTranslator(source='auto', target=language).translate(terms_str)
+                                    terms_str = translated
                             if is_this_game_banned == "None":
                                 await please_wait.delete()
                                 for number in range(int(math.ceil(char_range / 1990))):
                                     if(number == 0):
-                                        
                                         await message.channel.send("*" + terms_str[0 : 1990] + "*")
-                                       
                                     else:
                                         await message.channel.send("*" + terms_str[number * 1990 : (number + 1) * 1990] + "*")
-                                await message.channel.send(url_to_terms)
+                                await message.channel.send("`The result might not include the whole list. Please check it at:` " + url_to_terms)
                             else:
                                 await please_wait.delete()
                                 if is_this_game_banned.lower() in terms_str.lower():
@@ -325,16 +313,15 @@ async def on_message(message):
                                     await message.channel.send("*" + is_this_game_banned + "*" + " was not found in the terms and conditions!")
                                     return
                         else:
-                            print("terms is empty")
                             await please_wait.delete()
                             await message.channel.send("Could not find any games!")
-
                             return
                 else:
-                    print("links is empty")
+                    await please_wait.delete()
+                    await message.channel.send("Could not find any games!")
                     return   
         else:
-            print("not a valid url")
+            await message.channel.send("Not a valid url! (example.com)")
             return
     else:
         return
