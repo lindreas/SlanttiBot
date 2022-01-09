@@ -2,24 +2,53 @@
 
 Slanttibot is a Discord bot that searches online casino games that are banned from playing with a bonus balance.
 
-## How to use SlanttiBot (command !help)
+### How to use SlanttiBot (command !help)
 
-!examplecasino.com
-*Enter a url to an online casino to fetch the games that are banned from playing with bonusmoney.*
+*!examplecasino.com<br>*
+Enter a url to an online casino to fetch the games that are banned from playing with bonusmoney.
 
-!examplecasino.com /de
-*Translate the result from english. Available languages:
-arabic: ar, bulgarian: bg, catalan: ca, chinese (simplified): zh-CN, chinese (traditional): zh-TW, croatian: hr, czech: cs, danish: da, dutch: nl, estonian: et, 
-finnish: fi, french: fr, german: de, greek: el, hungarian: hu, icelandic: is, italian: it, japanese: ja, korean: ko, latvian: lv, lithuanian: lt, norwegian: no,
-polish: pl, portuguese: pt, russian: ru, slovak: sk, slovenian: sl, spanish: es, swedish: sv, turkish: tr*
+*!examplecasino.com /de<br>*
+Translate the result from english.
+<details><summary>Available languages:</summary>
+arabic: ar<br>
+bulgarian: bg<br>
+catalan: ca<br>
+chinese (simplified): zh-CN<br>
+chinese (traditional): zh-TW<br>
+croatian: hr<br>
+czech: cs<br>
+danish: da<br>
+dutch: nl<br>
+estonian: et<br>
+finnish: fi<br>
+french: fr<br>
+german: de<br>
+greek: el<br>
+hungarian: hu<br>
+icelandic: is<br>
+italian: it<br>
+japanese: ja<br>
+korean: ko<br>
+latvian: lv<br>
+lithuanian: lt<br>
+norwegian: no<br>
+polish: pl<br>
+portuguese: pt<br>
+russian: ru<br>
+slovak: sk<br>
+slovenian: sl<br>
+spanish: es<br>
+swedish: sv<br>
+turkish: tr<br>
+</details>
 
-!examplecasino.com Book of Dead
-*Check if a specific game is banned.*
+*!examplecasino.com Book of Dead<br>*
+Check if a specific game is banned.
 
-!stats Book of Dead
-*Returns the stats of a chosen game.*
+*!stats Book of Dead<br>*
+Returns the stats of a chosen game.
 
-!game
-*SlanttiBot suggests a random game to you!*
+*!game<br>*
+SlanttiBot suggests a random game to you!
 
 Add the bot to your Discord channel: [https://discord.com/api/oauth2/authorize?client_id=904402860572299364&permissions=534723950656&scope=bot](https://discord.com/api/oauth2/authorize?client_id=904402860572299364&permissions=534723950656&scope=bot)
