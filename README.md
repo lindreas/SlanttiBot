@@ -1,6 +1,6 @@
 # SlanttiBot
 
-Slanttibot is a Discord bot that searches terms and conditions for online casino games that are banned from playing with a bonus balance.
+SlanttiBot is a Discord bot that searches terms and conditions for online casino games that are banned from playing with a bonus balance.
 
 ### How to use SlanttiBot (command !help)
 
