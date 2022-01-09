@@ -203,7 +203,7 @@ async def on_message(message):
                         else:
                             await message.channel.send("*" + terms_from_csv[number * 1990 : (number + 1) * 1990] + "*")
                     
-                    await message.channel.send("`The result might not include the whole list. Please check it at:` " + url_to_terms)
+                    await message.channel.send("`The result's are not 100% accurate. Please check the terms at:` " + url_to_terms)
                 else:
                     await please_wait.delete()
                     if is_this_game_banned.lower() in terms_from_csv.lower():
@@ -304,7 +304,7 @@ async def on_message(message):
                                         await message.channel.send("*" + terms_str[0 : 1990] + "*")
                                     else:
                                         await message.channel.send("*" + terms_str[number * 1990 : (number + 1) * 1990] + "*")
-                                await message.channel.send("`The result might not include the whole list. Please check it at:` " + url_to_terms)
+                                await message.channel.send("`The result's are not 100% accurate. Please check the terms at:` " + url_to_terms)
                             else:
                                 await please_wait.delete()
                                 if is_this_game_banned.lower() in terms_str.lower():
