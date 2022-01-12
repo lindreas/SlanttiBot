@@ -8,38 +8,38 @@ SlanttiBot is a Discord bot that searches terms and conditions for online casino
 Enter a url to an online casino to fetch the games that are banned from playing with bonusmoney.
 
 *!examplecasino.com /de<br>*
-Translate the results from english to other languages.
+Translate the results from English to other languages.
 <details><summary>Available languages:</summary>
-arabic: ar<br>
-bulgarian: bg<br>
-catalan: ca<br>
-chinese (simplified): zh-CN<br>
-chinese (traditional): zh-TW<br>
-croatian: hr<br>
-czech: cs<br>
-danish: da<br>
-dutch: nl<br>
-estonian: et<br>
-finnish: fi<br>
-french: fr<br>
-german: de<br>
-greek: el<br>
-hungarian: hu<br>
-icelandic: is<br>
-italian: it<br>
-japanese: ja<br>
-korean: ko<br>
-latvian: lv<br>
-lithuanian: lt<br>
-norwegian: no<br>
-polish: pl<br>
-portuguese: pt<br>
-russian: ru<br>
-slovak: sk<br>
-slovenian: sl<br>
-spanish: es<br>
-swedish: sv<br>
-turkish: tr<br>
+Arabic: ar<br>
+Bulgarian: bg<br>
+Catalan: ca<br>
+Chinese (simplified): zh-CN<br>
+Chinese (traditional): zh-TW<br>
+Croatian: hr<br>
+Czech: cs<br>
+Danish: da<br>
+Dutch: nl<br>
+Estonian: et<br>
+Finnish: fi<br>
+French: fr<br>
+German: de<br>
+Greek: el<br>
+Hungarian: hu<br>
+Icelandic: is<br>
+Italian: it<br>
+Japanese: ja<br>
+Korean: ko<br>
+Latvian: lv<br>
+Lithuanian: lt<br>
+Norwegian: no<br>
+Polish: pl<br>
+Portuguese: pt<br>
+Russian: ru<br>
+Slovak: sk<br>
+Slovenian: sl<br>
+Spanish: es<br>
+Swedish: sv<br>
+Turkish: tr<br>
 </details>
 
 *!examplecasino.com Book of Dead<br>*
