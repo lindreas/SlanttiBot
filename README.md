@@ -8,7 +8,7 @@ SlanttiBot is a Discord bot that searches terms and conditions for online casino
 Enter a url to an online casino to fetch the games that are banned from playing with bonusmoney.
 
 *!examplecasino.com /de<br>*
-Translate the result from english.
+Translate the result from english to other languages.
 <details><summary>Available languages:</summary>
 arabic: ar<br>
 bulgarian: bg<br>
